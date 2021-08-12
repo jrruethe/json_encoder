@@ -1,0 +1,4 @@
+name: json_encoder
+author: jrruethe@gmail.com
+summary: Encodes JSON into a format that can be embedded into a QR code
+license: GPLv3
