@@ -7,46 +7,122 @@
 require 'racc/parser.rb'
 module JsonEncoder
   class Parser < Racc::Parser
+
+
+require "json_encoder/handler"
+
+attr_reader :handler
+
+def initialize(tokenizer, handler = Handler.new)
+  @tokenizer = tokenizer
+  @handler   = handler
+  super()
+end
+
+def next_token
+  @tokenizer.next_token
+end
+
+def parse
+  do_parse
+  handler
+end
 ##### State transition tables begin ###
 
 racc_action_table = [
-     2,     3,     4 ]
+    12,    13,    14,    15,    16,     6,    20,    31,    17,     8,
+    12,    13,    14,    15,    16,     6,    25,    25,    34,     8,
+    12,    13,    14,    15,    16,     6,    29,    32,    12,     8,
+    12,    13,    14,    15,    16,     6,    12,   nil,   nil,     8,
+   nil,   nil,    20 ]
 
 racc_action_check = [
-     0,     1,     3 ]
+     0,     0,     0,     0,     0,     0,    19,    19,     1,     0,
+     7,     7,     7,     7,     7,     7,     7,    24,    24,     7,
+    32,    32,    32,    32,    32,    32,    17,    22,    31,    32,
+    34,    34,    34,    34,    34,    34,     5,   nil,   nil,    34,
+   nil,   nil,     5 ]
 
 racc_action_pointer = [
-    -2,     1,   nil,     2,   nil ]
+    -2,     8,   nil,   nil,   nil,    34,   nil,     8,   nil,   nil,
+   nil,   nil,   nil,   nil,   nil,   nil,   nil,    26,   nil,    -2,
+   nil,   nil,    17,   nil,     9,   nil,   nil,   nil,   nil,   nil,
+   nil,    26,    18,   nil,    28,   nil,   nil,   nil ]
 
 racc_action_default = [
-    -2,    -2,    -1,    -2,     5 ]
+   -27,   -27,    -1,    -2,    -3,   -27,    -6,   -27,   -13,   -17,
+   -20,   -21,   -22,   -23,   -24,   -25,   -26,   -27,    -4,   -27,
+    -7,    -9,   -27,   -11,   -27,   -14,   -16,   -18,   -19,    38,
+    -5,   -27,   -27,   -12,   -27,    -8,   -10,   -15 ]
 
 racc_goto_table = [
-     1 ]
+     4,    21,    22,    23,    18,     1,     2,    26,     3,    19,
+    24,   nil,   nil,   nil,   nil,   nil,   nil,   nil,    30,   nil,
+    33,   nil,   nil,   nil,   nil,   nil,   nil,    35,    22,   nil,
+   nil,   nil,    36,   nil,    37 ]
 
 racc_goto_check = [
-     1 ]
+     4,     8,     9,    11,     6,     1,     2,     4,     3,     7,
+    12,   nil,   nil,   nil,   nil,   nil,   nil,   nil,     6,   nil,
+    11,   nil,   nil,   nil,   nil,   nil,   nil,     8,     9,   nil,
+   nil,   nil,     4,   nil,     4 ]
 
 racc_goto_pointer = [
-   nil,     0 ]
+   nil,     5,     6,     8,     0,   nil,    -1,     4,    -4,    -3,
+   nil,    -4,     3,   nil,   nil ]
 
 racc_goto_default = [
-   nil,   nil ]
+   nil,   nil,    27,    28,   nil,     5,   nil,   nil,   nil,    10,
+     7,   nil,   nil,     9,    11 ]
 
 racc_reduce_table = [
   0, 0, :racc_error,
-  1, 4, :_reduce_none ]
+  1, 13, :_reduce_none,
+  1, 13, :_reduce_none,
+  1, 13, :_reduce_none,
+  2, 14, :_reduce_none,
+  3, 14, :_reduce_none,
+  1, 17, :_reduce_6,
+  1, 18, :_reduce_7,
+  3, 19, :_reduce_none,
+  1, 19, :_reduce_none,
+  3, 20, :_reduce_none,
+  2, 15, :_reduce_none,
+  3, 15, :_reduce_none,
+  1, 22, :_reduce_13,
+  1, 23, :_reduce_14,
+  3, 24, :_reduce_none,
+  1, 24, :_reduce_none,
+  1, 16, :_reduce_none,
+  1, 16, :_reduce_none,
+  1, 16, :_reduce_none,
+  1, 25, :_reduce_none,
+  1, 25, :_reduce_21,
+  1, 21, :_reduce_22,
+  1, 26, :_reduce_23,
+  1, 26, :_reduce_24,
+  1, 26, :_reduce_25,
+  1, 26, :_reduce_26 ]
 
-racc_reduce_n = 2
+racc_reduce_n = 27
 
-racc_shift_n = 5
+racc_shift_n = 38
 
 racc_token_table = {
   false => 0,
   :error => 1,
-  :value => 2 }
+  :STRING => 2,
+  :NUMBER => 3,
+  :TRUE => 4,
+  :FALSE => 5,
+  :NULL => 6,
+  "*" => 7,
+  "+" => 8,
+  "," => 9,
+  ":" => 10,
+  "-" => 11 }
 
-racc_nt_base = 3
+racc_nt_base = 12
 
 racc_use_result_var = true
 
@@ -69,9 +145,31 @@ Racc_arg = [
 Racc_token_to_s_table = [
   "$end",
   "error",
-  "value",
+  "STRING",
+  "NUMBER",
+  "TRUE",
+  "FALSE",
+  "NULL",
+  "\"*\"",
+  "\"+\"",
+  "\",\"",
+  "\":\"",
+  "\"-\"",
   "$start",
-  "document" ]
+  "document",
+  "object",
+  "array",
+  "value",
+  "start_object",
+  "end_object",
+  "pairs",
+  "pair",
+  "string",
+  "start_array",
+  "end_array",
+  "values",
+  "scalar",
+  "literal" ]
 
 Racc_debug_parser = false
 
@@ -80,6 +178,86 @@ Racc_debug_parser = false
 # reduce 0 omitted
 
 # reduce 1 omitted
+
+# reduce 2 omitted
+
+# reduce 3 omitted
+
+# reduce 4 omitted
+
+# reduce 5 omitted
+
+def _reduce_6(val, _values, result)
+@handler.start_object
+    result
+end
+
+def _reduce_7(val, _values, result)
+@handler.end_object
+    result
+end
+
+# reduce 8 omitted
+
+# reduce 9 omitted
+
+# reduce 10 omitted
+
+# reduce 11 omitted
+
+# reduce 12 omitted
+
+def _reduce_13(val, _values, result)
+@handler.start_array
+    result
+end
+
+def _reduce_14(val, _values, result)
+@handler.end_array
+    result
+end
+
+# reduce 15 omitted
+
+# reduce 16 omitted
+
+# reduce 17 omitted
+
+# reduce 18 omitted
+
+# reduce 19 omitted
+
+# reduce 20 omitted
+
+def _reduce_21(val, _values, result)
+@handler.scalar(val[0])
+    result
+end
+
+def _reduce_22(val, _values, result)
+@handler.scalar(val[0])
+    result
+end
+
+def _reduce_23(val, _values, result)
+n = val[0]; result = n.include?(".") ? n.to_f : n.to_i
+    result
+end
+
+def _reduce_24(val, _values, result)
+result = true
+    result
+end
+
+def _reduce_25(val, _values, result)
+result = false
+    result
+end
+
+def _reduce_26(val, _values, result)
+result = nil
+    result
+end
 
 def _reduce_none(val, _values, result)
   val[0]
