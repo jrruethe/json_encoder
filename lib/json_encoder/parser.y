@@ -1,6 +1,6 @@
 class JsonEncoder::Parser
 
-token STRING NUMBER TRUE FALSE NULL
+token STRING INTEGER FLOAT TRUE FALSE NULL
 
 rule
   document
@@ -19,11 +19,11 @@ rule
     : "+" {@handler.end_object}
   ;
   pairs
-    : pairs "," pair
+    : pairs "." pair
     | pair
   ;
   pair
-    : string ":" value
+    : string "." value
   ;
   array
     : start_array end_array
@@ -36,7 +36,7 @@ rule
     : "+" {@handler.end_array}
   ;
   values
-    : values "," value
+    : values "." value
     | value
   ;
   value
@@ -52,10 +52,11 @@ rule
     : STRING {@handler.scalar(val[0])}
   ;
   literal
-    : NUMBER {n = val[0]; result = n.include?(".") ? n.to_f : n.to_i}
-    | TRUE   {result = true}
-    | FALSE  {result = false}
-    | NULL   {result = nil}
+    : INTEGER {result = val[0].to_i}
+    | FLOAT   {result = val[0].to_f}
+    | TRUE    {result = true}
+    | FALSE   {result = false}
+    | NULL    {result = nil}
   ;
 
 end
