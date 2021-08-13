@@ -2,9 +2,9 @@
 
 module JsonEncoder
   class Tokenizer
-    STRING  = /[a-zA-Z ]+/
-    INTEGER = /($-)?[1-9][0-9]*/
-    FLOAT   = /($-)?[1-9][0-9]*\$\.[0-9]*/
+    STRING  = /[a-zA-Z 0-9]+/
+    INTEGER = /(\$-)?[1-9][0-9]*/
+    FLOAT   = /(\$-)?[1-9][0-9]*\$\.[0-9]*/
     TRUE    = /true/
     FALSE   = /false/
     NULL    = /null/
@@ -17,7 +17,7 @@ module JsonEncoder
       return if @ss.eos?
       case
       when text = @ss.scan(FLOAT)   ; [:FLOAT,   text.gsub("$", "")]
-      when text = @ss.scan(INTEGER) ; [:INTEGER, text]
+      when text = @ss.scan(INTEGER) ; [:INTEGER, text.gsub("$", "")]
       when text = @ss.scan(TRUE)    ; [:TRUE,    text]
       when text = @ss.scan(FALSE)   ; [:FALSE,   text]
       when text = @ss.scan(NULL)    ; [:NULL,    text]

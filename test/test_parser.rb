@@ -29,8 +29,12 @@ module JsonEncoder
         assert_equal "Hello World", parse("Hello World")
       end
 
-      should "parse top-level number" do
+      should "parse top-level integer" do
         assert_equal 1, parse("1")
+      end
+
+      should "parse top-level float" do
+        assert_equal 1.1, parse("1$.1")
       end
 
       should "parse object" do

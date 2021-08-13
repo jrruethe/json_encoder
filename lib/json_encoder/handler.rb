@@ -2,47 +2,48 @@
 
 module JsonEncoder
   class Handler
-    attr_reader :stack
 
     def initialize
       @stack = [[:root]]
     end
 
     def start_object
-      push [:hash]
+      push([:hash])
     end
 
     def start_array
-      push [:array]
+      push([:array])
     end
 
-    def end_array
+    def end_object
       @stack.pop
     end
-    alias :end_object :end_array
+    alias :end_array :end_object
 
-    def scalar s
-      @stack.last << [:scalar, s]
-    end
-
-    def push o
-      @stack.last << o
-      @stack << o
+    def scalar(object)
+      @stack.last << [:scalar, object]
     end
 
     def result
       root = @stack.first.last
-      process root.first, root.drop(1)
+      process(root.first, root.drop(1))
+    end
+
+    private
+
+    def push(object)
+      @stack.last << object
+      @stack << object
     end
 
     def process type, rest
       case type
-      when :array
-        rest.map { |x| process(x.first, x.drop(1)) }
       when :hash
-        Hash[rest.map { |x|
-          process(x.first, x.drop(1))
-        }.each_slice(2).to_a]
+        t = rest.map{|i| process(i.first, i.drop(1))}
+        t = t.each_slice(2).to_a.map{|(k,v)| [k.to_sym, v]}
+        Hash[t]
+      when :array
+        rest.map{|i| process(i.first, i.drop(1))}
       when :scalar
         rest.first
       end
