@@ -1,5 +1,8 @@
 #!/usr/bin/env ruby
 
+# Adapted from:
+# https://github.com/tenderlove/rjson/blob/master/lib/rjson/handler.rb
+
 module JsonEncoder
   class Handler
 

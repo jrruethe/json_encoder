@@ -1,3 +1,6 @@
+# Adapted from:
+# https://github.com/tenderlove/rjson/blob/master/lib/rjson/parser.y
+
 class JsonEncoder::Parser
 
 token STRING INTEGER FLOAT TRUE FALSE NULL
