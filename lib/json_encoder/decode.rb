@@ -10,10 +10,19 @@ module JsonEncoder
   class Decoder
 
     def self.decode(string)
-      parse(pad(string))
+      parse(pad(prefix(string)))
     end
 
     private
+
+    def self.prefix(string)
+      if count(string, ".") > 0   &&
+         !string.start_with?("-") &&
+         !string.start_with?("*")
+        return "*" + string
+      end
+      return string
+    end
 
     def self.pad(string)
       so = count(string, "*")
@@ -23,7 +32,8 @@ module JsonEncoder
     end
 
     def self.count(string, char)
-      string.scan(/\$#{Regexp.escape(char)}|(#{Regexp.escape(char)})/).flatten.count(char)
+      c = Regexp.escape(char)
+      string.scan(/\$#{c}|(#{c})/).flatten.count(char)
     end
 
     def self.parse(string)

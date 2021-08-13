@@ -39,11 +39,19 @@ module JsonEncoder
       end
 
       should "decode objects" do
+        assert_equal ({key: "value"}), JsonEncoder.decode("*key.value+")
+      end
 
+      should "decode unpadded objects" do
+        assert_equal ({key: "value"}), JsonEncoder.decode("*key.value")
+      end
+
+      should "decode unprefixed objects" do
+        assert_equal ({key: "value"}), JsonEncoder.decode("key.value")
       end
 
       should "decode arrays" do
-
+        assert_equal [1, 2, 3], JsonEncoder.decode("-1.2.3")
       end
 
       should "decode complex objects" do
@@ -63,7 +71,7 @@ module JsonEncoder
       end
 
       should "decode urls" do
-
+        
       end
 
       should "decode 0-prefixed integers as strings" do
