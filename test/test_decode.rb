@@ -55,7 +55,7 @@ module JsonEncoder
       end
 
       should "decode complex objects" do
-
+        assert_equal ({s: "a", i: 1, f: 1.1, a: [1,2], o: {k: "v"}}), JsonEncoder.decode("s.a.i.1.f.1$.1.a.-1.2+.o.*k.v")
       end
 
       should "decode escaped strings" do
@@ -71,7 +71,7 @@ module JsonEncoder
       end
 
       should "decode urls" do
-        
+
       end
 
       should "decode 0-prefixed integers as strings" do

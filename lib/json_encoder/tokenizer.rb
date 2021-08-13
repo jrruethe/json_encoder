@@ -9,8 +9,8 @@ module JsonEncoder
     FALSE   = /false/
     NULL    = /null/
 
-    def initialize io
-      @ss = StringScanner.new io.read
+    def initialize(io)
+      @ss = StringScanner.new(io.read)
     end
 
     def next_token
@@ -24,7 +24,7 @@ module JsonEncoder
       when text = @ss.scan(STRING)  ; [:STRING,  text]
       else
         x = @ss.getch
-        [x, x]
+        return [x, x]
       end
     end
   end

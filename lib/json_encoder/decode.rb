@@ -16,9 +16,9 @@ module JsonEncoder
     private
 
     def self.prefix(string)
-      if count(string, ".") > 0   &&
-         !string.start_with?("-") &&
-         !string.start_with?("*")
+      if count(string, ".") > 0  &&
+        !string.start_with?("-") &&
+        !string.start_with?("*")
         return "*" + string
       end
       return string
