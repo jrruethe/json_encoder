@@ -1,13 +1,15 @@
 #!/usr/bin/env ruby
 
+require "json_encoder/escape"
+
 module JsonEncoder
   class Tokenizer
-    STRING  = /[a-zA-Z 0-9]+/
+    STRING  = /[\$A-Z 0-9%]+/
     INTEGER = /(\$-)?[1-9][0-9]*/
     FLOAT   = /(\$-)?[1-9][0-9]*\$\.[0-9]*/
-    TRUE    = /true/
-    FALSE   = /false/
-    NULL    = /null/
+    TRUE    = /TRUE/
+    FALSE   = /FALSE/
+    NULL    = /NULL/
 
     def initialize(io)
       @ss = StringScanner.new(io.read)
@@ -21,7 +23,7 @@ module JsonEncoder
       when text = @ss.scan(TRUE)    ; [:TRUE,    text]
       when text = @ss.scan(FALSE)   ; [:FALSE,   text]
       when text = @ss.scan(NULL)    ; [:NULL,    text]
-      when text = @ss.scan(STRING)  ; [:STRING,  text]
+      when text = @ss.scan(STRING)  ; [:STRING,  JsonEncoder.unescape(text)]
       else
         x = @ss.getch
         return [x, x]

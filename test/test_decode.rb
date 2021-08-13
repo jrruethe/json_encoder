@@ -15,7 +15,7 @@ module JsonEncoder
     context "decoder" do
 
       should "decode strings" do
-        assert_equal "Hello World", JsonEncoder.decode("Hello World")
+        assert_equal "Hello World", JsonEncoder.decode("$HELLO $WORLD")
       end
 
       should "decode integers" do
@@ -27,27 +27,27 @@ module JsonEncoder
       end
 
       should "decode true" do
-        assert_equal true, JsonEncoder.decode("true")
+        assert_equal true, JsonEncoder.decode("TRUE")
       end
 
       should "decode false" do
-        assert_equal false, JsonEncoder.decode("false")
+        assert_equal false, JsonEncoder.decode("FALSE")
       end
 
       should "decode nil" do
-        assert_nil JsonEncoder.decode("null")
+        assert_nil JsonEncoder.decode("NULL")
       end
 
       should "decode objects" do
-        assert_equal ({key: "value"}), JsonEncoder.decode("*key.value+")
+        assert_equal ({key: "value"}), JsonEncoder.decode("*KEY.VALUE+")
       end
 
       should "decode unpadded objects" do
-        assert_equal ({key: "value"}), JsonEncoder.decode("*key.value")
+        assert_equal ({key: "value"}), JsonEncoder.decode("*KEY.VALUE")
       end
 
       should "decode unprefixed objects" do
-        assert_equal ({key: "value"}), JsonEncoder.decode("key.value")
+        assert_equal ({key: "value"}), JsonEncoder.decode("KEY.VALUE")
       end
 
       should "decode arrays" do
@@ -55,7 +55,7 @@ module JsonEncoder
       end
 
       should "decode complex objects" do
-        assert_equal ({s: "a", i: 1, f: 1.1, a: [1,2], o: {k: "v"}}), JsonEncoder.decode("s.a.i.1.f.1$.1.a.-1.2+.o.*k.v")
+        assert_equal ({s: "a", i: 1, f: 1.1, a: [1,2], o: {k: "v"}}), JsonEncoder.decode("S.A.I.1.F.1$.1.A.-1.2+.O.*K.V")
       end
 
       should "decode escaped strings" do
