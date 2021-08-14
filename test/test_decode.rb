@@ -62,6 +62,18 @@ module JsonEncoder
         assert_equal "email_address@domain.com", JsonEncoder.decode("EMAIL$9ADDRESS$8DOMAIN$.COM")
       end
 
+      should "decode dates" do
+        assert_equal "8/13/21", JsonEncoder.decode("8$313$321")
+      end
+
+      should "decode times" do
+        assert_equal "12:06:23", JsonEncoder.decode("12$406$423")
+      end
+
+      should "decode IP addresses" do
+        assert_equal "127.0.0.1", JsonEncoder.decode("127$.0$.0$.1")
+      end
+
       should "decode urls" do
         assert_equal "https://www.example.com?query=Hello%20World", JsonEncoder.decode("HTTPS$4$3$3WWW$.EXAMPLE$.COM$7QUERY$6$HELLO%2520$WORLD")
       end
@@ -71,11 +83,33 @@ module JsonEncoder
       end
 
       should "decode negative integers" do
-        assert_equal -123, JsonEncoder.decode("$-123")
+        assert_equal (-123), JsonEncoder.decode("$-123")
       end
 
       should "decode negative floats" do
-        assert_equal -11.22, JsonEncoder.decode("$-11$.22")
+        assert_equal (-11.22), JsonEncoder.decode("$-11$.22")
+      end
+
+      should "decode base64" do
+        assert_equal "SGVsbG8gV29ybGQ=", JsonEncoder.decode("$S$G$VSB$G8G$V29YB$G$Q$6")
+      end
+
+      should "decode example" do
+        truth =
+        {
+          name:
+          {
+            first: "Joe",
+            last: "Ruether"
+          },
+          email: "jrruethe@gmail.com",
+          date: "8/13/21",
+          license: "GPLv3",
+          test: [1, 2.2, {three: [4, 5.5, "six"]}],
+          purpose: "Json encoder for QR codes"
+        }
+
+        assert_equal truth, JsonEncoder.decode("NAME.*FIRST.$JOE.LAST.$RUETHER+.EMAIL.JRRUETHE$8GMAIL$.COM.DATE.8$313$321.LICENSE.$G$P$LV3.TEST.-1.2$.2.*THREE.-4.5$.5.SIX+++.PURPOSE.$JSON ENCODER FOR $Q$R CODES")
       end
 
     end

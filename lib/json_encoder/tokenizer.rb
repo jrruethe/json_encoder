@@ -7,12 +7,12 @@ require "json_encoder/escape"
 
 module JsonEncoder
   class Tokenizer
-    STRING  = /(\$?[A-Z]|\$?[0-9]|[ %]|\$[-*+.])+/
     INTEGER = /(\$-)?[1-9][0-9]*/
     FLOAT   = /(\$-)?[1-9][0-9]*\$\.[0-9]*/
     TRUE    = /TRUE/
     FALSE   = /FALSE/
     NULL    = /NULL/
+    STRING  = /(\$?[A-Z]|\$?[0-9]|\$[*\-+.]|[% ])+/
 
     def initialize(io)
       @ss = StringScanner.new(io.read)
@@ -21,8 +21,8 @@ module JsonEncoder
     def next_token
       return if @ss.eos?
       case
-      when text = @ss.scan(FLOAT)   ; [:FLOAT,   text.gsub("$", "")]
-      when text = @ss.scan(INTEGER) ; [:INTEGER, text.gsub("$", "")]
+      # when text = @ss.scan(FLOAT)   ; [:FLOAT,   text.gsub("$", "")]
+      # when text = @ss.scan(INTEGER) ; [:INTEGER, text.gsub("$", "")]
       when text = @ss.scan(TRUE)    ; [:TRUE,    text]
       when text = @ss.scan(FALSE)   ; [:FALSE,   text]
       when text = @ss.scan(NULL)    ; [:NULL,    text]
