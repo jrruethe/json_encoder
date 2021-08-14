@@ -9,7 +9,7 @@ module JsonEncoder
   class Encoder
 
     def self.encode(object)
-      serialized = object.to_json
+      
     end
 
     private

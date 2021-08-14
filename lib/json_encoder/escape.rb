@@ -3,11 +3,17 @@
 module JsonEncoder
 
   def self.escape(string)
-    string.gsub(/([A-Z])/, "$\\1").upcase.gsub(/[^A-Z0-9 $]/, PERCENT_ENCODER)
+    string.gsub(/([A-Z])/, "$\\1")
+          .upcase
+          .gsub(/#{SYMBOLS}/, SYMBOL_ENCODER)
+          .gsub(/[^A-Z0-9 $]/, PERCENT_ENCODER)
   end
 
   def self.unescape(string)
-    string.downcase.gsub(/\$([a-z])/){$1.upcase}.b.gsub(/%\h\h/, PERCENT_DECODER)
+    string.downcase
+          .gsub(/\$([-*+.a-z])/){$1.upcase}
+          .gsub(/(#{ENCODED_SYMBOLS})/, SYMBOL_DECODER)
+          .gsub(/%\h\h/, PERCENT_DECODER)
   end
 
   private
@@ -31,4 +37,20 @@ module JsonEncoder
   end
   PERCENT_DECODER.freeze
 
+  SYMBOL_ENCODER =
+  {
+    "#" => "$0",
+    "&" => "$1",
+    "," => "$2",
+    "/" => "$3",
+    ":" => "$4",
+    ";" => "$5",
+    "=" => "$6",
+    "?" => "$7",
+    "@" => "$8",
+    "_" => "$9",
+  }.freeze
+  SYMBOLS = /[#{Regexp.escape(SYMBOL_ENCODER.keys.join)}]/
+  SYMBOL_DECODER = SYMBOL_ENCODER.invert.freeze
+  ENCODED_SYMBOLS = /\$[0-9]/
 end

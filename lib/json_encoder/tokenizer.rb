@@ -7,7 +7,7 @@ require "json_encoder/escape"
 
 module JsonEncoder
   class Tokenizer
-    STRING  = /[\$A-Z 0-9%]+/
+    STRING  = /(\$?[A-Z]|\$?[0-9]|[ %]|\$[-*+.])+/
     INTEGER = /(\$-)?[1-9][0-9]*/
     FLOAT   = /(\$-)?[1-9][0-9]*\$\.[0-9]*/
     TRUE    = /TRUE/

@@ -59,19 +59,11 @@ module JsonEncoder
       end
 
       should "decode escaped strings" do
-
-      end
-
-      should "decode percent-encoded strings" do
-
-      end
-
-      should "decode complex strings" do
-
+        assert_equal "email_address@domain.com", JsonEncoder.decode("EMAIL$9ADDRESS$8DOMAIN$.COM")
       end
 
       should "decode urls" do
-
+        assert_equal "https://www.example.com?query=Hello%20World", JsonEncoder.decode("HTTPS$4$3$3WWW$.EXAMPLE$.COM$7QUERY$6$HELLO%2520$WORLD")
       end
 
       should "decode 0-prefixed integers as strings" do

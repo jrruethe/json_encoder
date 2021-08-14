@@ -54,14 +54,6 @@ module JsonEncoder
 
       end
 
-      should "encode percent-encoded strings" do
-
-      end
-
-      should "encode complex strings" do
-
-      end
-
       should "encode urls" do
 
       end
