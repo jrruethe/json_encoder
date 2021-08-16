@@ -62,6 +62,10 @@ module JsonEncoder
         assert_equal "email_address@domain.com", JsonEncoder.decode("EMAIL$9ADDRESS$8DOMAIN$.COM")
       end
 
+      should "decode money" do
+        assert_equal "$1.23", JsonEncoder.decode("$$1$.23")
+      end
+
       should "decode dates" do
         assert_equal "8/13/21", JsonEncoder.decode("8$313$321")
       end
@@ -72,6 +76,10 @@ module JsonEncoder
 
       should "decode IP addresses" do
         assert_equal "127.0.0.1", JsonEncoder.decode("127$.0$.0$.1")
+      end
+
+      should "decode base64" do
+        assert_equal "SGVsbG8gV29ybGQ=", JsonEncoder.decode("$S$G$VSB$G8G$V29YB$G$Q$6")
       end
 
       should "decode urls" do
@@ -88,10 +96,6 @@ module JsonEncoder
 
       should "decode negative floats" do
         assert_equal (-11.22), JsonEncoder.decode("$-11$.22")
-      end
-
-      should "decode base64" do
-        assert_equal "SGVsbG8gV29ybGQ=", JsonEncoder.decode("$S$G$VSB$G8G$V29YB$G$Q$6")
       end
 
       should "decode example" do

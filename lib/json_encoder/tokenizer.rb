@@ -12,7 +12,7 @@ module JsonEncoder
     TRUE    = /TRUE/
     FALSE   = /FALSE/
     NULL    = /NULL/
-    STRING  = /(\$?[A-Z]|\$?[0-9]|\$[*\-+.]|[% ])+/
+    STRING  = /(\$?[A-Z]|\$?[0-9]|\$[$*\-+.]|[% ])+/
 
     def initialize(io)
       @ss = StringScanner.new(io.read)
@@ -26,7 +26,7 @@ module JsonEncoder
       when text = @ss.scan(TRUE)    ; [:TRUE,    text]
       when text = @ss.scan(FALSE)   ; [:FALSE,   text]
       when text = @ss.scan(NULL)    ; [:NULL,    text]
-      when text = @ss.scan(STRING)  ; [:STRING,  JsonEncoder.unescape(text)]
+      when text = @ss.scan(STRING)  ; [:STRING,  JsonEncoder::Escaper.unescape(text)]
       else
         x = @ss.getch
         return [x, x]
