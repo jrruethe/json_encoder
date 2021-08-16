@@ -106,3 +106,6 @@ All type information is lost during encoding, and instead values are interpreted
 - https://github.com/Path-Check/paper-cred
 - https://gir.st/blog/greenpass.html
 - https://news.ycombinator.com/item?id=27603173
+
+## License
+GPLv3
