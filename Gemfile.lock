@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     json_encoder (0.1.0)
+      racc
 
 GEM
   remote: https://rubygems.org/
@@ -32,7 +33,6 @@ DEPENDENCIES
   minitest
   minitest-reporters
   pry
-  racc
   rake
   shoulda-context
 

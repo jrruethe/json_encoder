@@ -12,10 +12,16 @@ Gem::Specification.new do |spec|
   metadata.each do |k,v|
     spec.send("#{k.to_sym}=", v)
   end
-  spec.files = Dir.glob("lib/**/*", File::FNM_DOTMATCH)
+  spec.files = Dir.glob("{lib,bin}/**/*", File::FNM_DOTMATCH)
+
+  spec.executables =
+  [
+    "json_encoder"
+  ]
+
+  spec.add_dependency "racc"
 
   spec.add_development_dependency "rake"
-  spec.add_development_dependency "racc"
   spec.add_development_dependency "minitest"
   spec.add_development_dependency "minitest-reporters"
   spec.add_development_dependency "shoulda-context"

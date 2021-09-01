@@ -1,0 +1,24 @@
+#!/usr/bin/env ruby
+
+require "optparse"
+require "ostruct"
+require "yaml"
+require "json"
+
+require "json_encoder"
+
+options = OpenStruct.new
+positional = OptionParser.new do |opts|
+  opts.banner = "Usage: json_encoder [-d] [file]"
+  opts.on("-d", "--decode"){options.decode = true}
+end.parse!
+
+if options.decode
+  string = ARGF.read
+  object = JsonEncoder.decode(string)
+  puts JSON.pretty_generate(object)
+else
+  object = YAML.load(ARGF.read)
+  string = JsonEncoder.encode(object)
+  print string
+end
